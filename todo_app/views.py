@@ -4,9 +4,8 @@ from django.shortcuts import render,redirect
 
 from django.views import View
 
-from todo_app.models import Task, Comment
-from todo_app.forms import TaskForm, CommentForm
-
+from todo_app.models import Task, Comment,Tag
+from todo_app.forms import TaskForm, CommentForm,TagForm
 
 class HomeView(View): 
     '''
@@ -23,6 +22,7 @@ class HomeView(View):
         html_data = {
             'task_list' : task,
             'form' : task_form,
+
         }
         return render(
             request=request,
@@ -50,7 +50,8 @@ class TaskDetailView(View):
         task = Task.objects.get(id=task_id)
         task_form = TaskForm(instance=task)
 
-
+        tag_form=TagForm
+        tags=task.tags.all()
         comments = Comment.objects.filter(task=task)
         comment_form = CommentForm(task=task)
 
@@ -58,7 +59,9 @@ class TaskDetailView(View):
             'task_object' : task,
             'form' : task_form,
             'comment_list': comments,
-            'comment_form': comment_form
+            'comment_form': comment_form,
+            'tag_form': tag_form,
+            'tags': tags,
         }
         return render(
             request=request,

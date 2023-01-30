@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from todo_app.models import Task, Comment
+from todo_app.models import Task, Comment,Tag
 
 class TaskForm(ModelForm):
     class Meta():
@@ -14,3 +14,11 @@ class CommentForm(ModelForm):
         task_object = kwargs.pop('task')
         super().__init__(*args, **kwargs)
         self.instance.task = task_object
+
+class TagForm(ModelForm):
+    class Meta:
+        model = Tag
+        fields = ['name'] 
+    def save(self,task, *args, **kwargs):
+        tag_name = self.data['name']
+        self.fields['name'].label=''
