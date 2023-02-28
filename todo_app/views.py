@@ -50,8 +50,8 @@ class TaskDetailView(View):
         task = Task.objects.get(id=task_id)
         task_form = TaskForm(instance=task)
 
-        tag_form=TagForm
-        tags=task.tags.all()
+        tag_form=TagForm()
+        tags=Tag.objects.filter(task=task)
         comments = Comment.objects.filter(task=task)
         comment_form = CommentForm(task=task)
 
@@ -79,6 +79,15 @@ class TaskDetailView(View):
             comment_form = CommentForm (request.POST, task=task)
             comment_form.save()
             return redirect('task_detail', task_id=task_id)
+        elif 'create_tag' in request.POST:
+            print(request.POST)
+            tag_form = TagForm (request.POST)
+            tag_form.save(task)
+            #task.add(tag_form)
+            return redirect('task_detail', task_id=task_id)
+    
+
+
         return redirect ('home')
 
 
